@@ -96,8 +96,26 @@ static PyMethodDef twedmethods[] = {
       "Computes the Time Warp Edit Distance (Marteau, 2009).\nInputs:\n\tFirst input (N x D)\n\tSecond input (M x D)\n\tTimepoint indices for the first input (N x 1)\n\tTimepoint indices for the second input (M x 1)\n\tKeywords mu (double), lambda (double), degree (integer)\n\nOutput:\n\tThe distance between the two inputs."},
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
+   
+PyMODINIT_FUNC PyInit_twed(void)
+{
+    PyObject *module;
+    static struct PyModuleDef twed = {
+    PyModuleDef_HEAD_INIT,
+    "twed", /* name of module */
+    "",          /* module documentation, may be NULL */
+    -1,          /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
+    twedmethods,
+	NULL,
+    NULL,
+    NULL,
+    NULL
+	};
+    module = PyModule_Create(&twed);
+    if (!module) return NULL;
 
-PyMODINIT_FUNC inittwed(void) {
-   (void)Py_InitModule("twed", twedmethods);
-   import_array();
+    /* Load `numpy` functionality. */
+    import_array();
+
+    return module;
 }
