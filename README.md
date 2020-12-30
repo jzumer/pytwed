@@ -30,8 +30,10 @@ ts2 = ts1.copy()
 twed.twed(seq1, seq2, ts1, ts2)
 ```
 
-I'm uploading this in case it can be useful to someone, but this isn't exactly a well-structured project with maintenance goals.
+## Liability
 
-### References
+We are providing the the code "as is" withouth a without warranty of any kind, in case it can be useful to someone, without maintenance goals. 
+
+## References
 
 [1] Marteau, Pierre-François. "Time warp edit distance with stiffness adjustment for time series matching." IEEE transactions on pattern analysis and machine intelligence 31.2 (2008): 306-318. Url: [https://arxiv.org/ftp/cs/papers/0703/0703033.pdf](https://arxiv.org/ftp/cs/papers/0703/0703033.pdf).
