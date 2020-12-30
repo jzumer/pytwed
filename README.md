@@ -44,4 +44,5 @@ We are providing the code "as is" without a warranty of any kind, with the hope 
 ## References
 
 [1] Marteau, Pierre-François. "Time warp edit distance with stiffness adjustment for time series matching." IEEE transactions on pattern analysis and machine intelligence 31.2 (2008): 306-318. Url: [https://arxiv.org/ftp/cs/papers/0703/0703033.pdf](https://arxiv.org/ftp/cs/papers/0703/0703033.pdf).
+
 [2] Serra, Joan, and Josep Ll Arcos. "An empirical evaluation of similarity measures for time series classification." Knowledge-Based Systems 67 (2014): 305-314.
