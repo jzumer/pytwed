@@ -12,6 +12,8 @@ The module can be installed by running the following command in the directory wi
 pip install .
 ```
 
+numpy needs to be installed as the only requirement.
+
 ### Using build script
 
 The `example_build.sh` provides an example command to build the sources without pip. 
