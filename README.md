@@ -1,7 +1,10 @@
 # Time Warped Edit Distance
 
-This is a python wrapper for Marteau's implementation of his 2009 paper introducing TWED (slightly modified and provided here). TWED is probably the current most accurate distance metric for timeseries data.
+This is a python wrapper for Marteau's implementation of his 2009 paper introducing TWED (slightly modified and provided here). TWED is probably the current most accurate distance metric for time series data.
+
 ## Install
+
+### Using pip
 
 The module can be installed by running the following command in the directory with the In the path of `setup.py`
 
@@ -9,7 +12,11 @@ The module can be installed by running the following command in the directory wi
 pip install .
 ```
 
-## Usagage
+### Using build script
+
+The `example_build.sh` provides an exemplary command to build the sources without pip. 
+
+## Usage
 
 The module can then be loaded directly like so:
 
