@@ -33,7 +33,7 @@ ts2 = ts1.copy()
 pytwed.twed(seq1, seq2, ts1, ts2, gamma = 0.001, lmbda = 1.0, degree = 2)
 ```
 
-Sequences `seq1` and `seq2` should of type `numpy.array` with shapes (m, d) and (n, d), where m and n are the lengths of the sequence and d is the dimensionality of the time sequences. The TWED should be provided with time stamps `ts1` and `ts2` with type `numpy.array`. For equally spaced sequences, they may be set to `ts1=np.arange(len(seq1))` and `ts2=np.arange(len(seq2))`. 
+Sequences `seq1` and `seq2` should be of type `numpy.array` with shapes (m, d) and (n, d), where m and n are the lengths of the sequence and d is the dimensionality of the time sequences. The TWED should be provided with time stamps `ts1` and `ts2` with type `numpy.array`. For equally spaced sequences, they may be set to `ts1=np.arange(len(seq1))` and `ts2=np.arange(len(seq2))`. 
 
 The distance function has three parameters that can be chosen/tuned. Degree refers to the $L^p$ norm that induces the distance calculation for individual elements. For `degree=2`, the Euclidean norm is used, and it is a useful default. Parameter `gamma` (should be > 0, default: 0.001) is a non-negative constant which characterizes the _stiffness_ of the elastic TWED measure. Parameter `lmbda` (should be >= 0, default: 1.0) is a constant penalty that punishes the editing efforts. The parameters should be tuned for each individual problem and dataset using training data minimizing your task's objective on a hold-out set. Grids to try are for instance `gamma in [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]` and `lmbda in [0, .25, .5, .75, 1.0]` (see [1] for more details).
 
