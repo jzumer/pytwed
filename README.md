@@ -1,6 +1,6 @@
 # Time Warped Edit Distance (TWED)
 
-This is a python wrapper for Marteau's implementation of this 2009 paper [1] introducing the Time Warped Edit Distance (TWED, also TWE Distance), slightly modified and provided here. TWED is an elastic distance metric for comparing time series sequences that has been shown to be a promising contender for the popular Dynamic Time Warping (DTW) distance and edit distances that have been adjusted to work on real numbers, such as the Edit Distance on Real Sequences (EDR) and Edit Distance with Real Penalty (ERP) [1, 2]. Like the edit distances, it comprises a penalty for mismatches, and, like DTW, it allows to control for _elasticity_. In contrast to DTW and the edit distance measures, it is a proper distance _metric_, as it fulfills the _triangle inequality_. Like DTW and the edit distances, TWED has a time complexity of O(mn), where m and n are the lengths of the time series sequences compared. Hence, it may not be appropriate for very long sequences and large time series databases. However, the fulfillment of the metric properties allows for using some established speed-up tricks in down-stream algorithms, like nearest neighbor retrieval, that can compensate for the complexity. 
+This is a python wrapper for Marteau's implementation of this 2009 paper [1] introducing the Time Warped Edit Distance (TWED, also TWE Distance), slightly modified and provided here. TWED is an elastic distance measure for comparing time series sequences that has been shown to be a promising contender for the popular Dynamic Time Warping (DTW) distance and edit distances that have been adjusted to work on real numbers, such as the Edit Distance on Real Sequences (EDR) and Edit Distance with Real Penalty (ERP) [1, 2]. Like the edit distances, it comprises a penalty for mismatches, and, like DTW, it allows to control for _elasticity_. In contrast to DTW and the edit distance measures, it is a proper distance _metric_, as it fulfills the _triangle inequality_. Like DTW and the edit distances, TWED has a time complexity of O(mn), where m and n are the lengths of the time series sequences compared. Hence, it may not be appropriate for very long sequences and large time series databases. However, the fulfillment of the metric properties allows for using some established speed-up tricks in down-stream algorithms, like nearest neighbor retrieval, that can compensate for the complexity. 
 
 ## Install
 
@@ -39,10 +39,10 @@ The distance function has three parameters that can be chosen/tuned. Parameter `
 
 ## Liability
 
-We are providing the code "as is" without a warranty of any kind, with the hope that it can be useful to someone without maintenance goals.
+This code is provided "as is" without a warranty of any kind, with the hope that it can be useful to someone without maintenance goals.
 
 ## References
 
-[1] Marteau, Pierre-François. "Time warp edit distance with stiffness adjustment for time series matching." IEEE transactions on pattern analysis and machine intelligence 31.2 (2008): 306-318. Url: [https://arxiv.org/ftp/cs/papers/0703/0703033.pdf](https://arxiv.org/ftp/cs/papers/0703/0703033.pdf).
+[1] Marteau, Pierre-François. "Time warp edit distance with stiffness adjustment for time series matching." IEEE transactions on pattern analysis and machine intelligence 31.2 (2008): 306-318. Url: [http://dx.doi.org/10.1109/TPAMI.2008.76)](http://dx.doi.org/10.1109/TPAMI.2008.76).
 
 [2] Serra, Joan, and Josep Ll Arcos. "An empirical evaluation of similarity measures for time series classification." Knowledge-Based Systems 67 (2014): 305-314.
