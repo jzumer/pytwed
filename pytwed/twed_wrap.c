@@ -14,6 +14,7 @@ Have fun.
 *****************************************************************
 */
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -53,18 +54,17 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
     if(ts_specs2 == NULL) goto fail;
 
     int ndims = PyArray_NDIM(arr1);
-    long int* arr1_dims = PyArray_DIMS(arr1);
-    long int* arr2_dims = PyArray_DIMS(arr2);
+    uint64_t* arr1_dims = PyArray_DIMS(arr1);
+    uint64_t* arr2_dims = PyArray_DIMS(arr2);
 	
     int n_feats = 1;
     if(ndims > 1) { 
-		/* n_feats = arr1_dims[1];  */
-		n_feats = PyArray_DIMS(arr1)[1]; 
+		n_feats = arr1_dims[1];
 	} else {
-        long int dims1[] = { arr1_dims[0], 1 };
+        uint64_t dims1[] = { arr1_dims[0], 1 };
         PyArray_Dims newshape1 = { dims1, 2 };
 
-        long int dims2[] = { arr2_dims[0], 1 };
+        uint64_t dims2[] = { arr2_dims[0], 1 };
         PyArray_Dims newshape2 = { dims2, 2 };
 
         arr1 = (PyArrayObject*)PyArray_Newshape(arr1, &newshape1, NPY_CORDER);
