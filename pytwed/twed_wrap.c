@@ -55,10 +55,12 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
     int ndims = PyArray_NDIM(arr1);
     long int* arr1_dims = PyArray_DIMS(arr1);
     long int* arr2_dims = PyArray_DIMS(arr2);
-
+	
     int n_feats = 1;
-    if(ndims > 1) { n_feats = arr1_dims[1]; }
-    else {
+    if(ndims > 1) { 
+		/* n_feats = arr1_dims[1];  */
+		n_feats = PyArray_DIMS(arr1)[1]; 
+	} else {
         long int dims1[] = { arr1_dims[0], 1 };
         PyArray_Dims newshape1 = { dims1, 2 };
 
