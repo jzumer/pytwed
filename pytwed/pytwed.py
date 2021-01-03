@@ -28,19 +28,6 @@ def twed(A, timeSA, B, timeSB, nu, lmbda, degree):
     #    IEEE Transactions on Pattern Analysis and Machine Intelligence. 31 (2): 306–318. arXiv:cs/0703033
     #    http://people.irisa.fr/Pierre-Francois.Marteau/
 
-    # Check if input arguments
-    if len(A) != len(timeSA):
-        print("The length of A is not equal length of timeSA")
-        return None, None
-
-    if len(B) != len(timeSB):
-        print("The length of B is not equal length of timeSB")
-        return None, None
-
-    if nu < 0:
-        print("nu is negative")
-        return None, None
-
     # Add padding
     A = np.array([0] + list(A))
     timeSA = np.array([0] + list(timeSA))
@@ -135,24 +122,3 @@ def backtracking(DP):
 
     best_path.reverse()
     return best_path[1:]
-
-# Simple test
-if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    A=np.array([[0],[0],[1],[1],[2],[3],[5],[2],[0],[1],[-0.1]])
-    tA=list(i for i in range(len(A)))
-    B=np.array([[0],[1],[2],[2.5],[3],[3.5],[4],[4.5],[5.5],[2],[0],[0],[.25],[.05],[0]])
-    tB=list(i for i in range(len(B)))
-    C=np.array([[4],[4],[3],[3],[3],[3],[2],[5],[2],[.5],[.5],[.5]])
-    tC=list(i for i in range(len(C)))
-    nu=.1
-    _lambda=.2
-    print("twed(A,B,nu,lambda)=", twed(A,tA,B,tB,nu,_lambda)[0])
-    print("twed(A,C,nu,lambda)=", twed(A,tA,C,tC,nu,_lambda)[0])
-    print("twed(B,C,nu,lambda)=", twed(B,tB,C,tC,nu,_lambda)[0])
-        
-    plt.plot(A, label='A')
-    plt.plot(B, label='B')
-    plt.plot(C, label='C')
-    plt.legend()
-    plt.show()
