@@ -12,7 +12,7 @@ setup(
     license="MIT License",
     author="Pierre-Francois Marteau, JZ, Marcus Voss",
     setup_requires=["numpy"],
-    ext_modules=[Extension('twed', sources=['pytwed/twed_wrap.c'], include_dirs=[numpy.get_include()], language="c")],
+    ext_modules=[Extension('twed', sources=['pytwed/fast_twed.c'], include_dirs=[numpy.get_include()], language="c")],
     description="This is a python wrapper for Marteau's reference implementation of his 2009 paper introducing the Time Warped Edit Distance (TWED).",
     long_description=readme,
     long_description_content_type="text/markdown",

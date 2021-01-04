@@ -54,14 +54,14 @@ def twed(A, timeSA, B, timeSB, nu, lmbda, degree):
                 DP[i - 1, j]
                 + Dlp(A[i - 1], A[i], p=degree)
                 + nu * (timeSA[i] - timeSA[i - 1])
-                + _lambda
+                + lmbda
             )
             # Deletion in B
             C[1] = (
                 DP[i, j - 1]
                 + Dlp(B[j - 1], B[j], p=degree)
                 + nu * (timeSB[j] - timeSB[j - 1])
-                + _lambda
+                + lmbda
             )
             # Keep data points in both time series
             C[2] = (

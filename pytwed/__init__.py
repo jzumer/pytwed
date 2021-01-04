@@ -1,5 +1,5 @@
 from twed import twed as ctwed
-from .pytwed import twed as pytwed
+from .slow_twed import twed as pytwed
 import numpy as np
 
 
@@ -22,9 +22,9 @@ def twed(s1, s2, ts1=None, ts2=None, lmbda=1.0, nu=0.001, p=2, fast=True):
     nu: float > 0, default: 0.001
         A non-negative constant which characterizes the stiffness of the elastic TWED measure.
     p: int
-        Order of the p-norm.
+        Order of the p-norm for local cost.
     fast: boolean, default: True
-        If true, uses fast C implementation, if False uses Python reference implementation.
+        If true, uses fast C implementation, if False uses Python reference implementation. Default "True" should usually be used, as it is typically magnitutes faster. 
 
     Returns
     -------
