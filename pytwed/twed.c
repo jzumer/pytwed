@@ -35,7 +35,7 @@ Please cite as:
 } 
 */
 
-/* Fixed (in the most important parts) by me */
+/* Rewritten by JZ based on the python version */
 
 /* 
 INPUTS
@@ -52,99 +52,54 @@ int degree: power degree for the evaluation of the local distance between sample
 OUTPUT
 double: the TWED distance between time series ta and tb.
 */
-double DTWEDL1d(int dim, double *ta, int la, double *tsa, double *tb, int lb, double *tsb, double nu, double lambda, int degree) {
-    // 
-    //    TWED PAMI
-    //    
-    if(la<0||lb<0){
-        fprintf(stderr, "twed: the lengths of the input timeseries should be greater or equal to 0\n");
-        exit(-1);
-    }
-    int r = la;
-    int c = lb;
-    double dist, disti1, distj1;
-    int i,j,k;
 
-    // allocations
-    double *D = (double *)calloc((r+1)*(c+1), sizeof(double));
-    double *Di1 = (double *)calloc(r+1, sizeof(double));
-    double *Dj1 = (double *)calloc(c+1, sizeof(double));
+#include <math.h>
 
-    // local costs initializations
-    for(j=1; j<=c; j++) {
-        distj1=0;
-        for(k=0; k<dim; k++) {
-            if(j>1){
-                distj1+=pow(fabs(tb[(j-2) * dim + k]-tb[(j-1) * dim + k]),degree);	
-            }
-            else {
-                distj1+=pow(fabs(tb[(j-1) * dim + k]),degree);
-            }
-        }
+#define INDEX(x, y) ((y)*arr1_lgt + (x))
 
-        Dj1[j]=(distj1);
+double dist(double* arr1, double* arr2, int lgt, int degree) {
+    double ret = 0;
+
+    for(unsigned int i = 0; i < lgt; i++) {
+        ret += pow(fabs(arr1[i] - arr2[i]), degree);
     }
 
-    for(i=1; i<=r; i++) { 
-        disti1=0;
-        for(k=0; k<dim; k++)
-            if(i>1)
-                disti1+=pow(fabs(ta[(i-2) * dim + k]-ta[(i-1) * dim + k]),degree);
-            else disti1+=pow(fabs(ta[(i-1) * dim + k]),degree);
-
-        Di1[i]=(disti1);
-
-        for(j=1; j<=c; j++) {
-            dist=0;
-            for(k=0; k<dim; k++){
-                dist+=pow(fabs(ta[(i-1) * dim + k]-tb[(j-1) * dim + k]),degree);	
-                if(i>1&&j>1)
-                    dist+=pow(fabs(ta[(i-2) * dim + k]-tb[(j-2) * dim + k]),degree);
-            }
-            D[i * (c+1) + j]=pow(dist,1.0/degree);
-        }
-    }// for i
-
-    // border of the cost matrix initialization
-    D[0]=0;
-    for(i=1; i<=r; i++)
-        D[i * (c + 1) + 0]=D[(i-1) * (c + 1) + 0]+Di1[i];
-    for(j=1; j<=c; j++)
-        D[j]=D[j-1]+Dj1[j];
-
-    double dmin, htrans, dist0;
-    int iback;
-
-    for (i=1; i<=r; i++){ 
-        for (j=1; j<=c; j++){
-            htrans=fabs((double)(tsa[i-1]-tsb[j-1]));
-            if(j>1&&i>1)
-                htrans+=fabs((double)(tsa[i-2]-tsb[j-2]));
-            dist0=D[(i-1) * (c + 1) + j-1]+nu*htrans+D[i * (c + 1) + j];
-            dmin=dist0;
-            if(i>1)
-                htrans=((double)(tsa[i-1]-tsa[i-2]));
-            else htrans=(double)tsa[i-1];
-            dist=Di1[i]+D[(i-1) * (c + 1) + j]+lambda+nu*htrans;
-            if(dmin>dist){
-                dmin=dist;
-            }
-            if(j>1)
-                htrans=((double)(tsb[j-1]-tsb[j-2]));
-            else htrans=(double)tsb[j-1]; 
-            dist=Dj1[j]+D[i * (c + 1) + j-1]+lambda+nu*htrans; 
-            if(dmin>dist){
-                dmin=dist;
-            } 
-            D[i * (c + 1) + j] = dmin;
-        }
-    }
-
-    dist = D[r * (c + 1)];
-    // freeing
-    free(D);
-    free(Di1);
-    free(Dj1);
-    return dist;
+    return pow(ret, 1.0 / degree);
 }
 
+double DTWEDL1d(int n_feats, double* arr1, int arr1_lgt, double* arr1_spec, double* arr2, int arr2_lgt, double* arr2_spec, double nu, double lambda, int degree) {
+    // Version based on the python version
+
+    // INIT
+    double* D = (double*)calloc((arr1_lgt)*(arr2_lgt), sizeof(double));
+    for(unsigned int i = 1; i < arr1_lgt; i++) {
+        D[INDEX(i, 0)] = INFINITY;
+    }
+    for(unsigned int i = 1; i < arr2_lgt; i++) {
+        D[INDEX(0, i)] = INFINITY;
+    }
+
+    // Go!
+    for(unsigned int j = 1; j < arr2_lgt; j++) {
+        for(unsigned int i = 1; i < arr1_lgt; i++) {
+            float del_a = D[INDEX(i-1, j)]
+                            + dist(arr1+((i-1)*n_feats), arr1+(i*n_feats), n_feats, degree)
+                            + nu * (arr1_spec[i] - arr1_spec[i-1])
+                            + lambda;
+            float del_b = D[INDEX(i, j-1)]
+                            + dist(arr2+((j-1)*n_feats), arr2+(j*n_feats), n_feats, degree)
+                            + nu * (arr2_spec[j] - arr2_spec[j-1])
+                            + lambda;
+            float match = D[INDEX(i-1, j-1)]
+                            + dist(arr1+(i*n_feats), arr2+(j*n_feats), n_feats, degree)
+                            + dist(arr1+((i-1)*n_feats), arr2+((j-1)*n_feats), n_feats, degree)
+                            + nu * (fabs(arr1_spec[i] - arr2_spec[j]) + fabs(arr1_spec[i-1] - arr2_spec[j-1]));
+
+            D[INDEX(i, j)] = fmin(match, fmin(del_a, del_b));
+        }
+    }
+
+    double ret = D[INDEX(arr1_lgt-1, arr2_lgt-1)];
+    free(D);
+    return ret;
+}

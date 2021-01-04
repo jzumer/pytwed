@@ -34,12 +34,10 @@ def twed(s1, s2, ts1=None, ts2=None, lmbda=1.0, nu=0.001, p=2, fast=True):
     """
     # Check if input arguments
     if (ts1 is not None) and (len(s1) != len(ts1)):
-        print("The length of s1 is not equal length of ts1.")
-        return None, None
+        raise ValueError("The length of s1 is not equal length of ts1.")
 
     if (ts2 is not None) and (len(s2) != len(ts2)):
-        print("The length of s2 is not equal length of ts2.")
-        return None, None
+        raise ValueError("The length of s2 is not equal length of ts2.")
 
     if ts1 is None:
         ts1 = np.arange(len(s1))
@@ -48,14 +46,17 @@ def twed(s1, s2, ts1=None, ts2=None, lmbda=1.0, nu=0.001, p=2, fast=True):
         ts2 = np.arange(len(s2))
 
     if nu <= 0.:
-        print("nu must be > 0.")
-        return None, None
+        raise ValueError("nu must be > 0.")
 
     if lmbda < 0:
-        print("lmbda must be >= 0.")
-        return None, None
+        raise ValueError("lmbda must be >= 0.")
+
+    s1 = np.vstack(([[0] * s1.shape[1]], s1))
+    ts1 = np.hstack(([0], ts1))
+    s2 = np.vstack(([[0] * s2.shape[1]], s2))
+    ts2 = np.hstack(([0], ts2))
 
     if fast:
-        return ctwed(arr1=s1, arr2=s2, arr1_spec=ts1, arr2_spec=ts2, nu=nu, lmbda=lmbda, degree=p)
+        return ctwed(arr1=s1, arr2=s2, arr1_spec=ts1, arr2_spec=ts2, nu=float(nu), lmbda=float(lmbda), degree=p)
     else:
         return pytwed(A=s1, timeSA=ts1, B=s2, timeSB=ts2, nu=nu, lmbda=lmbda, degree=p)[0]
