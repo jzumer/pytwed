@@ -22,7 +22,7 @@ Have fun.
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include "twed.c"
+#include "twed.h"
 
 static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
     PyObject* input1 = NULL;

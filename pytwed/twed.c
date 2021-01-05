@@ -53,7 +53,7 @@ OUTPUT
 double: the TWED distance between time series ta and tb.
 */
 
-#include <math.h>
+#include "twed.h"
 
 #define INDEX(x, y) ((y)*arr1_lgt + (x))
 
