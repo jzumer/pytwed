@@ -1,28 +1,68 @@
 /*
 Filename: twed_wrap.c
 Python wrapper for twed
-Author: JZ
+source code for the Time Warp Edit Distance in ANSI C.
+Author: Pierre-Francois Marteau, Rewritten by JZ based on the python version
 Licence: MIT
-******************************************************************
-This software and description is free delivered "AS IS" with no 
-guaranties for work at all. Its up to you testing it modify it as 
-you like, but no help could be expected from me due to lag of time 
-at the moment. I will answer short relevant questions and help as 
-my time allow it. I have tested it played with it and found no 
-problems in stability or malfunctions so far. 
-Have fun.
-*****************************************************************
 */
-
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <math.h>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include "twed.h"
+
+#define INDEX(x, y) ((y)*arr1_lgt + (x))
+
+double dist(double* arr1, double* arr2, int lgt, int degree) {
+    double ret = 0;
+
+    for(unsigned int i = 0; i < lgt; i++) {
+        ret += pow(fabs(arr1[i] - arr2[i]), degree);
+    }
+
+    return pow(ret, 1.0 / degree);
+}
+
+double DTWEDL1d(int n_feats, double* arr1, int arr1_lgt, double* arr1_spec, double* arr2, int arr2_lgt, double* arr2_spec, double nu, double lambda, int degree) {
+    // Version based on the python version
+
+    // INIT
+    double* D = (double*)calloc((arr1_lgt)*(arr2_lgt), sizeof(double));
+    for(unsigned int i = 1; i < arr1_lgt; i++) {
+        D[INDEX(i, 0)] = INFINITY;
+    }
+    for(unsigned int i = 1; i < arr2_lgt; i++) {
+        D[INDEX(0, i)] = INFINITY;
+    }
+
+    // Go!
+    for(unsigned int j = 1; j < arr2_lgt; j++) {
+        for(unsigned int i = 1; i < arr1_lgt; i++) {
+            float del_a = D[INDEX(i-1, j)]
+                            + dist(arr1+((i-1)*n_feats), arr1+(i*n_feats), n_feats, degree)
+                            + nu * (arr1_spec[i] - arr1_spec[i-1])
+                            + lambda;
+            float del_b = D[INDEX(i, j-1)]
+                            + dist(arr2+((j-1)*n_feats), arr2+(j*n_feats), n_feats, degree)
+                            + nu * (arr2_spec[j] - arr2_spec[j-1])
+                            + lambda;
+            float match = D[INDEX(i-1, j-1)]
+                            + dist(arr1+(i*n_feats), arr2+(j*n_feats), n_feats, degree)
+                            + dist(arr1+((i-1)*n_feats), arr2+((j-1)*n_feats), n_feats, degree)
+                            + nu * (fabs(arr1_spec[i] - arr2_spec[j]) + fabs(arr1_spec[i-1] - arr2_spec[j-1]));
+
+            D[INDEX(i, j)] = fmin(match, fmin(del_a, del_b));
+        }
+    }
+
+    double ret = D[INDEX(arr1_lgt-1, arr2_lgt-1)];
+    free(D);
+    return ret;
+}
 
 static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
     PyObject* input1 = NULL;

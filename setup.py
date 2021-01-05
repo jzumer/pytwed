@@ -7,11 +7,11 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="pytwed",
-    version="1.0.6",
+    version="1.0.7",
     license="MIT License",
     author="Pierre-Francois Marteau, JZ, Marcus Voss",
     setup_requires=["numpy"],
-    ext_modules=[Extension('twed', sources=['pytwed/fast_twed.c', 'pytwed/twed.c'], include_dirs=["pytwed", numpy.get_include()], extra_compile_args=["-std=c11"], language="c")],
+    ext_modules=[Extension('twed', sources=['pytwed/fast_twed.c'], include_dirs=["pytwed", numpy.get_include()], extra_compile_args=["-std=c11"], language="c")],
     description="This is a python wrapper for Marteau's reference implementation of his 2009 paper introducing the Time Warped Edit Distance (TWED).",
     long_description=readme,
     long_description_content_type="text/markdown",
