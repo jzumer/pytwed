@@ -1,3 +1,4 @@
 *.so
 *~
 *.sw*
+/test/__pycache__/*
