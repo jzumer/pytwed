@@ -9,7 +9,7 @@ import numpy as np
 
 def Dlp(A, B, p=2):
     cost = np.sum(np.power(np.abs(A - B), p))
-    return np.power(cost, 1 / p)
+    return np.power(cost, 1.0 / p)
 
 
 def twed(A, timeSA, B, timeSB, nu, lmbda, degree):
@@ -28,51 +28,47 @@ def twed(A, timeSA, B, timeSB, nu, lmbda, degree):
     #    IEEE Transactions on Pattern Analysis and Machine Intelligence. 31 (2): 306–318. arXiv:cs/0703033
     #    http://people.irisa.fr/Pierre-Francois.Marteau/
 
-    # Add padding
-    A = np.array([0] + list(A))
-    timeSA = np.array([0] + list(timeSA))
-    B = np.array([0] + list(B))
-    timeSB = np.array([0] + list(timeSB))
-
-    n = len(A)
-    m = len(B)
+    n = A.shape[0]
+    m = B.shape[0]
     # Dynamical programming
     DP = np.zeros((n, m))
 
     # Initialize DP Matrix and set first row and column to infinity
-    DP[0, :] = np.inf
-    DP[:, 0] = np.inf
-    DP[0, 0] = 0
+    DP[0, 1:] = np.inf
+    DP[1:, 0] = np.inf
 
     # Compute minimal cost
     for i in range(1, n):
         for j in range(1, m):
-            # Calculate and save cost of various operations
-            C = np.ones((3, 1)) * np.inf
+
             # Deletion in A
-            C[0] = (
+            del_a = (
                 DP[i - 1, j]
                 + Dlp(A[i - 1], A[i], p=degree)
                 + nu * (timeSA[i] - timeSA[i - 1])
                 + lmbda
             )
+
             # Deletion in B
-            C[1] = (
+            del_b = (
                 DP[i, j - 1]
                 + Dlp(B[j - 1], B[j], p=degree)
                 + nu * (timeSB[j] - timeSB[j - 1])
                 + lmbda
             )
+
             # Keep data points in both time series
-            C[2] = (
+            match = (
                 DP[i - 1, j - 1]
                 + Dlp(A[i], B[j], p=degree)
                 + Dlp(A[i - 1], B[j - 1], p=degree)
                 + nu * (abs(timeSA[i] - timeSB[j]) + abs(timeSA[i - 1] - timeSB[j - 1]))
             )
+
             # Choose the operation with the minimal cost and update DP Matrix
-            DP[i, j] = np.min(C)
-    distance = DP[n - 1, m - 1]
+            DP[i, j] = min(del_a, del_b, match)
+
+    distance = DP[n-1, m-1]
     return distance, DP
 
 def backtracking(DP):
