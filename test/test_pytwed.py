@@ -167,6 +167,29 @@ class PyTwedTest(TestCase):
         assert_almost_equal(twed(s1, s3, ts1, ts3, nu=nu, lmbda=lmbda, p=p, fast=False), 47.325, decimal=3)
         assert_almost_equal(twed(s2, s3, ts2, ts3, nu=nu, lmbda=lmbda, p=p, fast=False), 69.047, decimal=3)
 
+    def test_pytwed_flat_fast(self):
+        nu = .001
+        lmbda = 1.0
+        p = 2
+
+        s4 = np.array([1.0, 2.1, 3.2, 4.3, 5.4]).astype('float64')
+        s5 = np.array([9.8, 7.6, 6.5, 4.3, 2.1]).astype('float64')
+        ts4 = np.array([1., 2., 3., 4., 5.]).astype('float64')
+        ts5 = np.array([1., 2., 3., 4., 5.]).astype('float64')
+
+        assert_almost_equal(twed(s4, s5, ts4, ts5, nu=nu, lmbda=lmbda, p=p, fast=True), 24.904, decimal=3)
+
+    def test_pytwed_flat_slow(self):
+        nu = .001
+        lmbda = 1.0
+        p = 2
+
+        s4 = np.array([1.0, 2.1, 3.2, 4.3, 5.4]).astype('float64')
+        s5 = np.array([9.8, 7.6, 6.5, 4.3, 2.1]).astype('float64')
+        ts4 = np.array([1., 2., 3., 4., 5.]).astype('float64')
+        ts5 = np.array([1., 2., 3., 4., 5.]).astype('float64')
+
+        assert_almost_equal(twed(s4, s5, ts4, ts5, nu=nu, lmbda=lmbda, p=p, fast=False), 24.904, decimal=3)
 
 if __name__ == '__main__':
     unittest.main()

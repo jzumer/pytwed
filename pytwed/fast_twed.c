@@ -58,8 +58,8 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
         uint64_t dims2[] = { arr2_dims[0], 1 };
         PyArray_Dims newshape2 = { dims2, 2 };
 
-        arr1 = (PyArrayObject*)PyArray_Newshape(arr1, &newshape1, NPY_CORDER);
-        arr2 = (PyArrayObject*)PyArray_Newshape(arr2, &newshape2, NPY_CORDER);
+        arr1 = (PyArrayObject*)PyArray_Newshape(input1, &newshape1, NPY_CORDER);
+        arr2 = (PyArrayObject*)PyArray_Newshape(input2, &newshape2, NPY_CORDER);
     }
 
     arr1 = (PyArrayObject*)PyArray_FromAny(input1, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);

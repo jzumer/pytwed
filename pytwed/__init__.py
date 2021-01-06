@@ -51,6 +51,12 @@ def twed(s1, s2, ts1=None, ts2=None, lmbda=1.0, nu=0.001, p=2, fast=True):
     if lmbda < 0:
         raise ValueError("lmbda must be >= 0.")
 
+    if len(s1.shape) == 1:
+        s1 = s1.reshape((-1, 1))
+
+    if len(s2.shape) == 1:
+        s2 = s2.reshape((-1, 1))
+
     s1 = np.vstack(([[0] * s1.shape[1]], s1))
     ts1 = np.hstack(([0], ts1))
     s2 = np.vstack(([[0] * s2.shape[1]], s2))
