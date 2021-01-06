@@ -17,7 +17,6 @@ Have fun.
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
@@ -40,22 +39,14 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
         Py_RETURN_NONE;
     }
 
-    PyArrayObject* arr1 = NULL;
-    arr1 = (PyArrayObject*)PyArray_FromAny(input1, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
-    if(arr1 == NULL) goto fail;
-    PyArrayObject* arr2 = NULL;
-    arr2 = (PyArrayObject*)PyArray_FromAny(input2, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
-    if(arr2 == NULL) goto fail;
-    PyArrayObject* ts_specs1 = NULL;
-    ts_specs1 = (PyArrayObject*)PyArray_FromAny(input3, PyArray_DescrFromType(NPY_DOUBLE), 1, 1, NPY_ARRAY_CARRAY_RO, NULL);
-    if(ts_specs1 == NULL) goto fail;
-    PyArrayObject* ts_specs2 = NULL;
-    ts_specs2 = (PyArrayObject*)PyArray_FromAny(input4, PyArray_DescrFromType(NPY_DOUBLE), 1, 1, NPY_ARRAY_CARRAY_RO, NULL);
-    if(ts_specs2 == NULL) goto fail;
+    int ndims = PyArray_NDIM(input1);
+    uint64_t* arr1_dims = PyArray_DIMS(input1);
+    uint64_t* arr2_dims = PyArray_DIMS(input2);
 
-    int ndims = PyArray_NDIM(arr1);
-    uint64_t* arr1_dims = PyArray_DIMS(arr1);
-    uint64_t* arr2_dims = PyArray_DIMS(arr2);
+    PyArrayObject* arr1 = NULL;
+    PyArrayObject* arr2 = NULL;
+    PyArrayObject* ts_specs1 = NULL;
+    PyArrayObject* ts_specs2 = NULL;
 	
     int n_feats = 1;
     if(ndims > 1) { 
@@ -70,6 +61,15 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
         arr1 = (PyArrayObject*)PyArray_Newshape(arr1, &newshape1, NPY_CORDER);
         arr2 = (PyArrayObject*)PyArray_Newshape(arr2, &newshape2, NPY_CORDER);
     }
+
+    arr1 = (PyArrayObject*)PyArray_FromAny(input1, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
+    if(arr1 == NULL) goto fail;
+    arr2 = (PyArrayObject*)PyArray_FromAny(input2, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
+    if(arr2 == NULL) goto fail;
+    ts_specs1 = (PyArrayObject*)PyArray_FromAny(input3, PyArray_DescrFromType(NPY_DOUBLE), 1, 1, NPY_ARRAY_CARRAY_RO, NULL);
+    if(ts_specs1 == NULL) goto fail;
+    ts_specs2 = (PyArrayObject*)PyArray_FromAny(input4, PyArray_DescrFromType(NPY_DOUBLE), 1, 1, NPY_ARRAY_CARRAY_RO, NULL);
+    if(ts_specs2 == NULL) goto fail;
 
     double* arr1_data = (double*)PyArray_DATA(arr1);
     double* arr2_data = (double*)PyArray_DATA(arr2);
@@ -97,7 +97,16 @@ fail:
 static PyMethodDef twedmethods[] = {
     { "twed", (PyCFunctionWithKeywords)twed_,
       METH_VARARGS|METH_KEYWORDS,
-      "Computes the Time Warp Edit Distance (Marteau, 2009).\nInputs:\n\tFirst input (N x D)\n\tSecond input (M x D)\n\tTimepoint indices for the first input (N x 1)\n\tTimepoint indices for the second input (M x 1)\n\tKeywords nu (double), lmbda (double), degree (integer)\n\nOutput:\n\tThe distance between the two inputs."},
+      "Computes the Time Warp Edit Distance (Marteau, 2009).\n"
+      "Inputs:\n"
+      "\tFirst input (N x D)\n"
+      "\tSecond input (M x D)\n"
+      "\tTimepoint indices for the first input (N x 1)\n"
+      "\tTimepoint indices for the second input (M x 1)\n"
+      "\tKeywords nu (double), lmbda (double), degree (integer)\n"
+      "\n"
+      "Output:\n"
+      "\tThe distance between the two inputs." },
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
    
