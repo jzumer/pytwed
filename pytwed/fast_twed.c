@@ -51,6 +51,8 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
     int n_feats = 1;
     if(ndims > 1) { 
 		n_feats = arr1_dims[1];
+        arr1 = input1;
+        arr2 = input2;
 	} else {
         uint64_t dims1[] = { arr1_dims[0], 1 };
         PyArray_Dims newshape1 = { dims1, 2 };
@@ -62,9 +64,9 @@ static PyObject* twed_ (PyObject* dummy, PyObject* args, PyObject* kw) {
         arr2 = (PyArrayObject*)PyArray_Newshape(input2, &newshape2, NPY_CORDER);
     }
 
-    arr1 = (PyArrayObject*)PyArray_FromAny(input1, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
+    arr1 = (PyArrayObject*)PyArray_FromAny(arr1, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
     if(arr1 == NULL) goto fail;
-    arr2 = (PyArrayObject*)PyArray_FromAny(input2, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
+    arr2 = (PyArrayObject*)PyArray_FromAny(arr2, PyArray_DescrFromType(NPY_DOUBLE), 1, 2, NPY_ARRAY_CARRAY_RO, NULL);
     if(arr2 == NULL) goto fail;
     ts_specs1 = (PyArrayObject*)PyArray_FromAny(input3, PyArray_DescrFromType(NPY_DOUBLE), 1, 1, NPY_ARRAY_CARRAY_RO, NULL);
     if(ts_specs1 == NULL) goto fail;
