@@ -2,7 +2,7 @@
 Filename: twed_wrap.c
 Python wrapper for twed
 Author: JZ
-Licence: GPL
+Licence: MIT
 ******************************************************************
 This software and description is free delivered "AS IS" with no 
 guaranties for work at all. Its up to you testing it modify it as 

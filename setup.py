@@ -1,14 +1,13 @@
 from setuptools import setup, find_packages
 from distutils.extension import Extension
 import numpy
-#from Cython.Distutils import build_ext
 
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
 setup(
     name="pytwed",
-    version="1.0.2",
+    version="1.0.8",
     license="MIT License",
     author="Pierre-Francois Marteau, JZ, Marcus Voss",
     setup_requires=["numpy"],
@@ -18,7 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     url='https://github.com/jzumer/pytwed',
     packages=find_packages(),
-    #cmdclass={'build_ext': build_ext},
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: C",

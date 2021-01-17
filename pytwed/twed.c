@@ -3,7 +3,7 @@ Filename: twed.c
 source code for the Time Warp Edit Distance in ANSI C.
 Author: Pierre-Francois Marteau
 Version: V1.2.a du 25/08/2014, radix addition line 101, thanks to Benjamin Herwig from University of Kassel, Germany
-Licence: GPL
+Licence: MIT (change from GPL approved by Pierre-Francois Marteau)
 ******************************************************************
 This software and description is free delivered "AS IS" with no 
 guaranties for work at all. Its up to you testing it modify it as 
@@ -54,6 +54,7 @@ double: the TWED distance between time series ta and tb.
 */
 
 #include "twed.h"
+#include <stdlib.h> 
 
 #define INDEX(x, y) ((y)*arr1_lgt + (x))
 
