@@ -4,20 +4,28 @@ This is a python wrapper for Marteau's implementation of this 2009 paper [1] int
 
 ## Install
 
-### Using pip
+### Using pip and PyPI
 
-The module can be installed by running the following command in the directory with the In the path of `setup.py`
+The module can be installed from PyPI with
 
 ```bash
-pip install .
+pip install pytwed
 ```
+`numpy` needs to be installed as the only requirement.
 
-numpy needs to be installed as the only requirement.
+### Using pip locally
+
+The module can also be installed locally, by checking out this repo or downloading the code and running the following commands in the directory of `setup.py`
+
+```bash
+pip install -r requirements.txt
+python setup.py build
+python setup.py install
+```
 
 To test the installation run the following:
 ```bash
-cd test
-python -m unittest
+python test/test_pytwed.py
 ```
 
 ### Using build script
@@ -26,7 +34,7 @@ The `example_build.sh` provides an example command to build the sources without 
 
 ## Usage
 
-The module can then be loaded and directly used as follows:
+The module can then be loaded and used as follows:
 
 ```python
 import pytwed
@@ -43,11 +51,7 @@ Sequences `seq1` and `seq2` should be of type `numpy.array` with shapes (m, d) a
 
 The distance function has three parameters that can be chosen/tuned. Parameter `p` refers to the L^p norm that is used for the distance calculation locally for individual elements. For `p=2`, the Euclidean norm is used, and it is a useful default. Parameter `nu` (should be > 0, default: 0.001) is a non-negative constant which characterizes the _stiffness_ of the elastic TWED measure. Parameter `lmbda` (should be >= 0, default: 1.0) is a constant penalty that punishes the editing efforts. The parameters should be tuned for each individual problem and dataset using training data minimizing your task's objective on a hold-out set. Parameter grids to try are for instance `nu in [1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1]` and `lmbda in [0, .25, .5, .75, 1.0]` (see [1] for more details).
 
-This package provides two implementations: A fast implementation as a C extension and a pure Python implementation. The Python implementation should only be used as reference implementation. The C implementation is about 2 orders of magnitude faster. With parameter `fast=True` the C implementation is used.
-
-## Liability
-
-This code is provided "as is" without a warranty of any kind, with the hope that it can be useful to someone without maintenance goals.
+This package provides two implementations: A fast implementation as a C extension and a pure Python implementation. The Python implementation should only be used as reference implementation. The C implementation is about two orders of magnitude faster. With parameter `fast=True` the C implementation is used.
 
 ## References
 
